@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="OpenGTSMobil.ViewModels.LoginView">
+    <ContentPage.Content>
+        <StackLayout>
+            <Image x:Name="ImageLogo" Source="" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand"/>
+            <Frame HasShadow="False" Opacity="0.50">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image x:Name="IconAccount" IsVisible="False" Source="" WidthRequest="20" Grid.Row="0" Grid.Column="0"/>
+                    <Entry x:Name="EntryAccount" IsVisible="False" Placeholder="Cuenta" Grid.Row="0" Grid.Column="1"/>
+                    <Image x:Name="IconMail" IsVisible="False" Source="" WidthRequest="20" Grid.Row="1" Grid.Column="0"/>
+                    <Entry x:Name="EntryMail" Keyboard="Email" IsVisible="False" Placeholder="Correo" Grid.Row="1" Grid.Column="1"/>
+                    <Image x:Name="IconPassword" IsVisible="False" Source="" WidthRequest="20" Grid.Row="2" Grid.Column="0"/>
+                    <Entry x:Name="EntryPassword" IsPassword="True" Placeholder="Contrasena" Grid.Row="2" Grid.Column="1"/>
+                </Grid>
+            </Frame>
+            <Button x:Name="ButtonLogin" Text="Entrar" Image="" Clicked="ButtonLogin_Clicked"/>
+            <Label x:Name="LabelCopyright" Text=""
+                   IsVisible="False"
+                   VerticalTextAlignment="Center" 
+                   VerticalOptions="EndAndExpand" 
+                   HorizontalTextAlignment="Center" 
+                   HorizontalOptions="CenterAndExpand"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

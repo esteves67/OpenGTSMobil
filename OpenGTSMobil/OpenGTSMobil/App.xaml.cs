@@ -1,4 +1,6 @@
-﻿using System;
+﻿using OpenGTSMobil.ViewModels;
+using OpenGTSMobil.Models;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -10,8 +12,9 @@ namespace OpenGTSMobil
         public App()
         {
             InitializeComponent();
-
-            MainPage = new MainPage();
+            MainPage = new NavigationPage(new LoginView()) {
+                BarBackgroundColor = (!string.IsNullOrEmpty(Login.colorNavBar)) ? Color.FromHex(Login.colorNavBar) : Color.Default,
+                BarTextColor = (!string.IsNullOrEmpty(Login.colorTextNavBar))? Color.FromHex(Login.colorTextNavBar) : Color.Default };
         }
 
         protected override void OnStart()
