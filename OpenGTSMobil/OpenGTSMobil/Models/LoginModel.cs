@@ -37,10 +37,17 @@ namespace OpenGTSMobil.Models
 
         //Password
         //0 es la contrase#a por defecto errada.
-        public static int Password
+        public static string Password
         {
-            get => AppSettings.GetValueOrDefault(nameof(Password), 0);
+            get => AppSettings.GetValueOrDefault(nameof(Password), string.Empty);
             set => AppSettings.AddOrUpdateValue(nameof(Password), value);
+        }
+
+        //auto Login
+        public static bool autoLogin
+        {
+            get => AppSettings.GetValueOrDefault(nameof(autoLogin), false);
+            set => AppSettings.AddOrUpdateValue(nameof(autoLogin), value);
         }
     }
 }

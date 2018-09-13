@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OpenGTSMobil.Models;
+using OpenGTSMobil.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using static OpenGTSMobil.Models.ResultAPI;
 
-namespace OpenGTSMobil.ViewModels
+namespace OpenGTSMobil.View
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class LoginView : ContentPage
@@ -77,7 +79,28 @@ namespace OpenGTSMobil.ViewModels
             bool state = Validar();
             if (state)
             {
-                //<-- aqui va el codigo del HTTPClient -->
+                if(Global.isConected)
+                {
+                    Device.BeginInvokeOnMainThread(async() => {
+                        RestClient cliente = new RestClient();
+                        var result = await cliente.Login<AccountData>(EntryAccount.Text, EntryMail.Text, EntryPassword.Text);
+                        if(result != null){
+                            Global.deviceList = result.DeviceList;
+                            LoginModel.AccountID = EntryAccount.Text;
+                            LoginModel.Mail = EntryMail.Text;
+                            LoginModel.Password = EntryPassword.Text;
+                            if(Login.autoLogin){
+                                LoginModel.autoLogin = true;
+                            }
+                            Navigation.InsertPageBefore(new ShowMapView(), this);
+                            await Navigation.PopAsync(true);
+                        }
+                    });
+                }
+                else
+                {
+                    DisplayAlert("Error", Global.failNetwork, "Entendido.");
+                }
             }
             else
             {
