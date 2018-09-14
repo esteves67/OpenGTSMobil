@@ -53,6 +53,7 @@ namespace OpenGTSMobil.UWP
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
                 Xamarin.Forms.Forms.Init(e);
+                Xamarin.FormsGoogleMaps.Init("your_bing_maps_api_key");
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
