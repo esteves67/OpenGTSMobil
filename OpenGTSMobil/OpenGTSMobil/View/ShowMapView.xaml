@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:maps="clr-namespace:Xamarin.Forms.GoogleMaps;assembly=Xamarin.Forms.GoogleMaps" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="OpenGTSMobil.View.ShowMapView">
     <ContentPage.Content>
         <Grid>
@@ -9,8 +9,13 @@
             </Grid.RowDefinitions>
             <maps:Map x:Name="map" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Grid.RowSpan="2"/>
             <Label x:Name="Attr" BackgroundColor="Transparent" Grid.Row="1" HorizontalTextAlignment="End"/>
-            <StackLayout Orientation="Horizontal" Grid.Row="2">
-                <Picker x:Name="PickerVehicle" Title="Vehiculos" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" SelectedIndexChanged="PickerVehicle_SelectedIndexChanged"/>
+            <StackLayout Orientation="Vertical" Grid.Row="2">
+                <Label x:Name="labelvehicle" Text="" HorizontalOptions="CenterAndExpand" VerticalTextAlignment="Center" VerticalOptions="CenterAndExpand" HorizontalTextAlignment="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Handle_Tapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
+                <Picker x:Name="PickerVehicle" Title="Vehiculos" IsVisible="false" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" SelectedIndexChanged="PickerVehicle_SelectedIndexChanged"/>
             </StackLayout>
         </Grid>
     </ContentPage.Content>

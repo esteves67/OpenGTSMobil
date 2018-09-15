@@ -32,12 +32,15 @@ namespace OpenGTSMobil.View
             }
             else
             {
-                TileLayer objTile = null;
+                map.MapType = (ShowMap.typeMap == MapType.None) ? MapType.Street : ShowMap.typeMap;
                 map.TileLayers.Clear();
-                objTile = TileLayer.FromTileUri((int x, int y, int z) => new Uri($"" + ShowMap.MapProviderServer));
-                map.TileLayers.Add(objTile);
+                var tiles = TileLayer.FromTileUri((int x, int y, int z) => new Uri($"https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"));
+                map.TileLayers.Add(tiles);
                 MapaProvider = "OSM";
             }
+
+            map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(double.Parse(ShowMap.defaultPosition.Split(',')[0]), double.Parse(ShowMap.defaultPosition.Split(',')[1])), Distance.FromMeters(1000)));
+            map.UiSettings.MyLocationButtonEnabled = ShowMap.showMyLocation;
             Attr.Text = ShowMap.attrMap;
             map.UiSettings.ZoomControlsEnabled = ShowMap.showZoomMap;
             getServerData();
@@ -73,7 +76,7 @@ namespace OpenGTSMobil.View
         {
             cleanMap();
             var polyline = new Polyline();
-            List<Pin> pin = new List<Pin>();
+            Position posi = new Position();
             polyline.ZIndex = 1;
             polyline.StrokeWidth = ShowMap.anchoLineaMap;
             for (int i = 0; i < Global.deviceList.Count; i++)
@@ -81,21 +84,22 @@ namespace OpenGTSMobil.View
                 List<EventData> ed = Global.deviceList[i].EventData;
                 for (int edi = 0; edi < ed.Count; edi++)
                 {
-                    var posi = new Position(double.Parse(ed[edi].GPSPoint_lat), double.Parse(ed[edi].GPSPoint_lon));
+                    posi = new Position(double.Parse(ed[edi].GPSPoint_lat), double.Parse(ed[edi].GPSPoint_lon));
                     //polyline.Positions.Add(posi);
                     if (!isFleet && !string.IsNullOrEmpty(deviceID))
                     {
                         if (ed[edi].Device == deviceID)
                         {
-                            pin.Add(new Pin { Label = PinLabel(ed[edi]), Position = posi, Address = ed[edi].Address });
+                            map.Pins.Add(new Pin { Label = PinLabel(ed[edi]), Position = posi, Address = ed[edi].Address });
                         }
                     }
                     else
                     {
-                        pin.Add(new Pin { Label = PinLabel(ed[edi]), Position = posi, Address = ed[edi].Address });
+                        map.Pins.Add(new Pin { Label = PinLabel(ed[edi]), Position = posi, Address = ed[edi].Address });
                     }
                 }
             }
+            map.MoveToRegion(MapSpan.FromCenterAndRadius(posi, Distance.FromMeters(1000)));
         }
 
         /*Limpiar lineas y puntos*/
@@ -108,15 +112,18 @@ namespace OpenGTSMobil.View
         private void PickerVehicle_SelectedIndexChanged(object sender, EventArgs e)
         {
             int index = PickerVehicle.SelectedIndex;
+            ConfigModel.lastVehicleSelected = index;
             string itemIndexString = PickerVehicle.Items[index];
+            labelvehicle.Text = itemIndexString;
             bool isFleet = false;
             if (itemIndexString.Equals("Grupo"))
             {
                 isFleet = true;
+                labelvehicle.Text = "Grupo";
             }
             else
             {
-                itemIndexString = Global.deviceList[index].Device;
+                itemIndexString = Global.deviceList[index - 1].Device;
             }
             RenderMap(isFleet, itemIndexString);
 
@@ -134,10 +141,12 @@ namespace OpenGTSMobil.View
             int index = (ConfigModel.lastVehicleSelected > Global.deviceList.Count) ? 0 : ConfigModel.lastVehicleSelected;
             PickerVehicle.SelectedIndex = index;
             string itemIndexString = PickerVehicle.Items[index];
+            labelvehicle.Text = itemIndexString;
             bool isFleet = false;
             if (itemIndexString.Equals("Grupo"))
             {
                 isFleet = true;
+                labelvehicle.Text = "Grupo";
             }
             else
             {
@@ -169,6 +178,12 @@ namespace OpenGTSMobil.View
             data += string.Format("Dirección: {0} \n", model.Address);
             data += string.Format("Odómetro (km): {0} \n", model.Odometer);
             return data;
+        }
+
+        /* tap label vehicle*/
+        void Handle_Tapped(object sender, System.EventArgs e)
+        {
+            PickerVehicle.Focus();
         }
     }
 }
