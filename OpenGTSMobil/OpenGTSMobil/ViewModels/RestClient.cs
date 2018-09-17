@@ -8,7 +8,12 @@ namespace OpenGTSMobil.ViewModels
 {
     public class RestClient
     {
-        public static string urlServer = Global.urlServer;
+        public static string urlServer { get; set; }
+
+        public RestClient()
+        {
+            urlServer = Global.urlServer;
+        }
 
         //Login App
         public async Task<T> Login<T>(string AccountId = "", string Mail = "", string Password = "")

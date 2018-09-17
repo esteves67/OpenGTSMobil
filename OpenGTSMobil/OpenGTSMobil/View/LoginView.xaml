@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="OpenGTSMobil.View.LoginView">
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout Padding="5,5,5,5">
             <Image x:Name="ImageLogo" Source="" HorizontalOptions="CenterAndExpand" VerticalOptions="StartAndExpand"/>
             <Frame HasShadow="False" Opacity="0.50">
                 <Grid>
@@ -16,7 +16,7 @@
                     <Image x:Name="IconMail" IsVisible="False" Source="" WidthRequest="20" Grid.Row="1" Grid.Column="0"/>
                     <Entry x:Name="EntryMail" Keyboard="Email" IsVisible="False" Placeholder="Correo" Grid.Row="1" Grid.Column="1"/>
                     <Image x:Name="IconPassword" IsVisible="False" Source="" WidthRequest="20" Grid.Row="2" Grid.Column="0"/>
-                    <Entry x:Name="EntryPassword" IsPassword="True" Placeholder="Contrasena" Grid.Row="2" Grid.Column="1"/>
+                    <Entry x:Name="EntryPassword" IsPassword="True" Placeholder="Contraseña" Grid.Row="2" Grid.Column="1"/>
                 </Grid>
             </Frame>
             <Button x:Name="ButtonLogin" Text="Entrar" Image="" Clicked="ButtonLogin_Clicked"/>

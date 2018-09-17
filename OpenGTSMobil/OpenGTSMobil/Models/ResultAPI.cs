@@ -45,6 +45,7 @@ namespace OpenGTSMobil.Models
             public string Account_desc { get; set; }
             public string TimeZone { get; set; }
             public List<DeviceList> DeviceList { get; set; }
+            public string Error { get; set; }
         }
     }
 }

@@ -79,21 +79,35 @@ namespace OpenGTSMobil.View
             bool state = Validar();
             if (state)
             {
-                if(Global.isConected)
+                if(Global.isConected && !string.IsNullOrEmpty(Global.urlServer))
                 {
                     Device.BeginInvokeOnMainThread(async() => {
                         RestClient cliente = new RestClient();
                         var result = await cliente.Login<AccountData>(EntryAccount.Text, EntryMail.Text, EntryPassword.Text);
                         if(result != null){
-                            Global.deviceList = result.DeviceList;
-                            LoginModel.AccountID = EntryAccount.Text;
-                            LoginModel.Mail = EntryMail.Text;
-                            LoginModel.Password = EntryPassword.Text;
-                            if(Login.autoLogin){
-                                LoginModel.autoLogin = true;
+                            if (string.IsNullOrEmpty(result.Error))
+                            {
+                                Global.deviceList = result.DeviceList;
+                                LoginModel.AccountID = EntryAccount.Text;
+                                LoginModel.Mail = EntryMail.Text;
+                                LoginModel.Password = EntryPassword.Text;
+                                if (Login.autoLogin)
+                                {
+                                    LoginModel.autoLogin = true;
+                                }
+                                Navigation.InsertPageBefore(new ShowMapView(), this);
+                                await Navigation.PopAsync(true);
                             }
-                            Navigation.InsertPageBefore(new ShowMapView(), this);
-                            await Navigation.PopAsync(true);
+                            else
+                            {
+                                await DisplayAlert("Usuario", Login.FailLogin, "Entendido");
+                                EntryPassword.Text = "";
+                            } 
+                        }
+                        else
+                        {
+                            await DisplayAlert("Usuario", Login.FailLogin, "Entendido");
+                            EntryPassword.Text = "";
                         }
                     });
                 }

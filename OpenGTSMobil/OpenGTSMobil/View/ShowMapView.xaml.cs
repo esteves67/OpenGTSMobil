@@ -29,17 +29,29 @@ namespace OpenGTSMobil.View
                 map.TileLayers.Clear();
                 map.MapType = (ShowMap.typeMap == MapType.None)? MapType.Street : ShowMap.typeMap;
                 MapaProvider = "GoogleMaps";
+                Attr.IsVisible = false;
             }
             else
             {
                 map.MapType = (ShowMap.typeMap == MapType.None) ? MapType.Street : ShowMap.typeMap;
                 map.TileLayers.Clear();
-                var tiles = TileLayer.FromTileUri((int x, int y, int z) => new Uri($"https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"));
+                var tiles = TileLayer.FromTileUri((int x, int y, int z) => new Uri($"" + ShowMap.MapProviderServer));
                 map.TileLayers.Add(tiles);
                 MapaProvider = "OSM";
+                Attr.IsVisible = true;
             }
-
-            map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(double.Parse(ShowMap.defaultPosition.Split(',')[0]), double.Parse(ShowMap.defaultPosition.Split(',')[1])), Distance.FromMeters(1000)));
+            if (string.IsNullOrEmpty(ShowMap.cerrarCuenta))
+            {
+                buttonExit.IsVisible = true;
+                exitImage.IsVisible = false;
+            }
+            else
+            {
+                buttonExit.IsVisible = false;
+                exitImage.Source = ShowMap.cerrarCuenta;
+                exitImage.IsVisible = true;
+            }
+            map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(double.Parse(ShowMap.defaultPosition.Split(',')[0]), double.Parse(ShowMap.defaultPosition.Split(',')[1])), Distance.FromMeters(int.Parse(ShowMap.defaultPosition.Split(',')[2]))));
             map.UiSettings.MyLocationButtonEnabled = ShowMap.showMyLocation;
             Attr.Text = ShowMap.attrMap;
             map.UiSettings.ZoomControlsEnabled = ShowMap.showZoomMap;
@@ -184,6 +196,27 @@ namespace OpenGTSMobil.View
         void Handle_Tapped(object sender, System.EventArgs e)
         {
             PickerVehicle.Focus();
+        }
+
+        private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+        {
+            exit();
+        }
+
+        /*exit*/
+        async void exit()
+        {
+            LoginModel.AccountID = "";
+            LoginModel.Mail = "";
+            LoginModel.Password = "";
+            LoginModel.autoLogin = false;
+            Navigation.InsertPageBefore(new LoginView(), this);
+            await Navigation.PopAsync(true);
+        }
+
+        private void buttonExit_Clicked(object sender, EventArgs e)
+        {
+            exit();
         }
     }
 }

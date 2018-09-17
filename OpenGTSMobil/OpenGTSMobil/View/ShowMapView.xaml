@@ -8,13 +8,19 @@
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
             <maps:Map x:Name="map" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Grid.RowSpan="2"/>
-            <Label x:Name="Attr" BackgroundColor="Transparent" Grid.Row="1" HorizontalTextAlignment="End"/>
-            <StackLayout Orientation="Vertical" Grid.Row="2">
+            <Label x:Name="Attr" BackgroundColor="Transparent" Grid.Row="1" HorizontalTextAlignment="End" IsVisible="False"/>
+            <StackLayout Orientation="Horizontal" Grid.Row="2" Padding="3,3,3,3">
                 <Label x:Name="labelvehicle" Text="" HorizontalOptions="CenterAndExpand" VerticalTextAlignment="Center" VerticalOptions="CenterAndExpand" HorizontalTextAlignment="Center">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Tapped="Handle_Tapped"/>
                     </Label.GestureRecognizers>
                 </Label>
+                <Image x:Name="exitImage" IsVisible="False" Source="" VerticalOptions="CenterAndExpand" HorizontalOptions="EndAndExpand">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                    </Image.GestureRecognizers>
+                </Image>
+                <Button x:Name="buttonExit" Text="Salir" VerticalOptions="CenterAndExpand" HorizontalOptions="EndAndExpand" IsVisible="False" Clicked="buttonExit_Clicked"/>
                 <Picker x:Name="PickerVehicle" Title="Vehiculos" IsVisible="false" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" SelectedIndexChanged="PickerVehicle_SelectedIndexChanged"/>
             </StackLayout>
         </Grid>
