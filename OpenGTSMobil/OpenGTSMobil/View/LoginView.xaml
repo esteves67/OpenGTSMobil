@@ -19,6 +19,7 @@
                     <Entry x:Name="EntryPassword" IsPassword="True" Placeholder="Contraseña" Grid.Row="2" Grid.Column="1"/>
                 </Grid>
             </Frame>
+            <ActivityIndicator IsEnabled="false" x:Name="ChargerBar" HorizontalOptions="CenterAndExpand"/>
             <Button x:Name="ButtonLogin" Text="Entrar" Image="" Clicked="ButtonLogin_Clicked"/>
             <Label x:Name="LabelCopyright" Text=""
                    IsVisible="False"

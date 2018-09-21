@@ -1,4 +1,4 @@
-﻿using OpenGTSMobil.Models;
+using OpenGTSMobil.Models;
 using OpenGTSMobil.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -13,6 +13,10 @@ namespace OpenGTSMobil.View
     {
         public string MapaProvider = "";
         public Polyline line = new Polyline();
+        public string GoogleMapsSelected = "GoogleMaps";
+        public string OSMSelected = "OSM";
+        public string TitleErrorAlert = "Error";
+        public string GrupoTextString = "Grupo";
 
         public ShowMapView()
         {
@@ -28,17 +32,16 @@ namespace OpenGTSMobil.View
             {
                 map.TileLayers.Clear();
                 map.MapType = (ShowMap.typeMap == MapType.None)? MapType.Street : ShowMap.typeMap;
-                MapaProvider = "GoogleMaps";
+                MapaProvider = GoogleMapsSelected;
                 Attr.IsVisible = false;
             }
             else
             {
-                map.MapType = (ShowMap.typeMap == MapType.None) ? MapType.Street : ShowMap.typeMap;
                 map.TileLayers.Clear();
-                var tiles = TileLayer.FromTileUri((int x, int y, int z) => new Uri($"" + ShowMap.MapProviderServer));
-                map.TileLayers.Add(tiles);
-                MapaProvider = "OSM";
+                var tiles = TileLayer.FromTileUri((int x, int y, int z) => new Uri($""+ShowMap.MapProviderServer));
+                MapaProvider = OSMSelected;
                 Attr.IsVisible = true;
+                map.TileLayers.Add(tiles);
             }
             if (string.IsNullOrEmpty(ShowMap.cerrarCuenta))
             {
@@ -79,7 +82,7 @@ namespace OpenGTSMobil.View
             }
             else
             {
-                DisplayAlert("Error", Global.failNetwork, "Entendido.");
+                DisplayAlert(TitleErrorAlert, Global.failNetwork, "Entendido.");
             }
         }
 
@@ -128,10 +131,10 @@ namespace OpenGTSMobil.View
             string itemIndexString = PickerVehicle.Items[index];
             labelvehicle.Text = itemIndexString;
             bool isFleet = false;
-            if (itemIndexString.Equals("Grupo"))
+            if (itemIndexString.Equals(GrupoTextString))
             {
                 isFleet = true;
-                labelvehicle.Text = "Grupo";
+                labelvehicle.Text = GrupoTextString;
             }
             else
             {
@@ -145,7 +148,7 @@ namespace OpenGTSMobil.View
         void chargerData()
         {
             PickerVehicle.Items.Clear();
-            PickerVehicle.Items.Add("Grupo");
+            PickerVehicle.Items.Add(GrupoTextString);
             for (int i = 0; i < Global.deviceList.Count; i++)
             {
                 PickerVehicle.Items.Add(Global.deviceList[i].Device_desc);
@@ -155,10 +158,10 @@ namespace OpenGTSMobil.View
             string itemIndexString = PickerVehicle.Items[index];
             labelvehicle.Text = itemIndexString;
             bool isFleet = false;
-            if (itemIndexString.Equals("Grupo"))
+            if (itemIndexString.Equals(GrupoTextString))
             {
                 isFleet = true;
-                labelvehicle.Text = "Grupo";
+                labelvehicle.Text = GrupoTextString;
             }
             else
             {

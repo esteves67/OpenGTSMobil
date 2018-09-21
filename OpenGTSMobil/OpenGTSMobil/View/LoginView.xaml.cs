@@ -76,6 +76,9 @@ namespace OpenGTSMobil.View
 
         private void ButtonLogin_Clicked(object sender, EventArgs e)
         {
+            ChargerBar.IsEnabled = true;
+            ChargerBar.IsRunning = true;
+            ButtonLogin.IsEnabled = false;
             bool state = Validar();
             if (state)
             {
@@ -120,6 +123,9 @@ namespace OpenGTSMobil.View
             {
                 DisplayAlert("Error",msgError,"Entendido");
             }
+            ChargerBar.IsEnabled = false;
+            ChargerBar.IsRunning = false;
+            ButtonLogin.IsEnabled = true;
         }
 
         bool Validar()
