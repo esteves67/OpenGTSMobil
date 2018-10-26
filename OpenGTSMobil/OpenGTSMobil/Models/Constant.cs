@@ -20,7 +20,7 @@ namespace OpenGTSMobil.Models
     public class Global
     {
         public static bool isConected { get; set; }                                     //define el estado de red
-        public static string urlServer = "";                                            //Url de consulta Events de OpenGTS en formato "JSON"
+        public static string urlServer = "https://autorenova.com/events/data.json";                                            //Url de consulta Events de OpenGTS en formato "JSON"
         public static List<DeviceList> deviceList { get; set; }
         public static string failNetwork = "Verifique su estado de red";
     }
@@ -71,11 +71,12 @@ namespace OpenGTSMobil.Models
         public static string MapProviderServer = "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png";          //por defecto es OSM, se omite si se utiliza Google Maps
         public static string attrMap = "http://www.openstreetmap.org/copyright OpenStreetMap";                //este es el texto de atribuciones al mapa no lo desactive para evitar bloqueos
         public static bool useGoogleMaps = true;                                                              //debe preconfigurar el APIKEY en los lanzadores de cada solucion.
-        public static MapType typeMap = MapType.None;                                                         //tipo de mapa con GoogleMaps.
+        public static MapType typeMap = MapType.Street;                                                       //tipo de mapa con GoogleMaps.
         public static string colorBackgroundMap = "";                                                         //el color debe ser definido en HTML (#ffffff)
         public static string colorLineMap = "";                                                               //color de las lineas en el mapa.
-        public static float anchoLineaMap = 5f;                                                               //ancho de marca de lineas en el mapa.
+        public static float anchoLineaMap = 1f;                                                               //ancho de marca de lineas en el mapa.
         public static bool showMyLocation = false;                                                            //mostrar ubacion del usuario.
         public static string defaultPosition = "-2.0000000,-77.5000000,1000";                                 //posicion del mapa por defecto ejemplo:(latitud,longitud,metros) Ecuador
+        public static int CantEvents = 100;                                                                   //Cantidad de eventos que mostrara en pantallla.
     }
 }

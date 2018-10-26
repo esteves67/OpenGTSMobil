@@ -94,27 +94,54 @@ namespace OpenGTSMobil.View
             Position posi = new Position();
             polyline.ZIndex = 1;
             polyline.StrokeWidth = ShowMap.anchoLineaMap;
-            for (int i = 0; i < Global.deviceList.Count; i++)
+            string rt = TimePicker.Date.ToString("yyyy/MM/dd") + "/23:59:59";
+            if (isFleet)
             {
-                List<EventData> ed = Global.deviceList[i].EventData;
-                for (int edi = 0; edi < ed.Count; edi++)
-                {
-                    posi = new Position(double.Parse(ed[edi].GPSPoint_lat), double.Parse(ed[edi].GPSPoint_lon));
-                    //polyline.Positions.Add(posi);
-                    if (!isFleet && !string.IsNullOrEmpty(deviceID))
+                Device.BeginInvokeOnMainThread(async() => {
+                    RestClient client = new RestClient();
+                    var response = await client.GetEventGroup<AccountData>();
+                    if (response != null)
                     {
-                        if (ed[edi].Device == deviceID)
+                        List<DeviceList> ld = response.DeviceList;
+                        for (int di = 0; di < ld.Count; di++)
                         {
-                            map.Pins.Add(new Pin { Label = PinLabel(ed[edi]), Position = posi, Address = ed[edi].Address });
+                            List<EventData> ed = ld[di].EventData;
+                            for (int edi = 0; edi < ed.Count; edi++)
+                            {
+                                posi = new Position(double.Parse(ed[edi].GPSPoint_lat), double.Parse(ed[edi].GPSPoint_lon));
+                                map.Pins.Add(new Pin { Label = PinLabel(ed[edi]), Position = posi, Address = ed[edi].Address, Icon = BitmapDescriptorFactory.FromBundle("pin30_blue.png") });
+                            }
                         }
+                        map.MoveToRegion(MapSpan.FromCenterAndRadius(posi, Distance.FromMeters(10000)));
                     }
-                    else
-                    {
-                        map.Pins.Add(new Pin { Label = PinLabel(ed[edi]), Position = posi, Address = ed[edi].Address });
-                    }
-                }
+                });
             }
-            map.MoveToRegion(MapSpan.FromCenterAndRadius(posi, Distance.FromMeters(1000)));
+            else
+            {
+                Device.BeginInvokeOnMainThread(async () => {
+                    RestClient client = new RestClient();
+                    var response = await client.GetEventsVehicle<AccountData>(deviceID,rt);
+                    if (response != null)
+                    {
+                        List<DeviceList> ld = response.DeviceList;
+                        for (int di = 0; di < ld.Count; di++)
+                        {
+                            List<EventData> ed = ld[di].EventData;
+                            for (int edi = 0; edi < ed.Count; edi++)
+                            {
+                                posi = new Position(double.Parse(ed[edi].GPSPoint_lat), double.Parse(ed[edi].GPSPoint_lon));
+                                polyline.Positions.Add(posi);
+                                map.Pins.Add(new Pin { Label = PinLabel(ed[edi]), Position = posi, Address = ed[edi].Address, Tag=ed[edi].Index, Icon = BitmapDescriptorFactory.FromBundle(CalculatePushPin(ed[edi].Heading,ed[edi].Speed)) });
+                            }
+                        }
+                        if (response.DeviceList[0].EventData.Count > 1)
+                        {
+                            map.Polylines.Add(polyline);
+                        }
+                        map.MoveToRegion(MapSpan.FromCenterAndRadius(posi, Distance.FromMeters(1000)));
+                    }
+                });
+            }
         }
 
         /*Limpiar lineas y puntos*/
@@ -220,6 +247,50 @@ namespace OpenGTSMobil.View
         private void buttonExit_Clicked(object sender, EventArgs e)
         {
             exit();
+        }
+
+        /* Calcular direccion del push pin */
+        private string CalculatePushPin(string heading, string speed)
+        {
+            double _speed = (!string.IsNullOrEmpty(speed))? double.Parse(speed) : 0.0;
+            double _heading = (!string.IsNullOrEmpty(heading))? double.Parse(heading) : 0.0;
+            if (_speed < 2)
+            {
+                return "pin30_blue_dot.png";
+            }
+            if ((_heading >= 337 && _heading <= 360) || (_heading >= 1 && _heading < 23))
+            {
+                return "pin30_blue_h0.png";
+            }
+            if (_heading >= 23 && _heading < 68)
+            {
+                return "pin30_blue_h1.png";
+            }
+            if (_heading >= 68 && _heading < 113)
+            {
+                return "pin30_blue_h2.png";
+            }
+            if (_heading >= 113 && _heading < 158)
+            {
+                return "pin30_blue_h3.png";
+            }
+            if (_heading >= 158 && _heading < 203)
+            {
+                return "pin30_blue_h4.png";
+            }
+            if(_heading >= 203 && _heading < 248)
+            {
+                return "pin30_blue_h5.png";
+            }
+            if (_heading >= 248 && _heading < 293)
+            {
+                return "pin30_blue_h6.png";
+            }
+            if (_heading >= 293 && _heading < 337)
+            {
+                return "pin30_blue_h7.png";
+            }
+            return "pin30_blue_dot.png";
         }
     }
 }

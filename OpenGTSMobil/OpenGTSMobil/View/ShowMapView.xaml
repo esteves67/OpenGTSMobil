@@ -9,6 +9,7 @@
             </Grid.RowDefinitions>
             <maps:Map x:Name="map" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Grid.RowSpan="2"/>
             <Label x:Name="Attr" BackgroundColor="Transparent" Grid.Row="1" HorizontalTextAlignment="End" IsVisible="False"/>
+            <DatePicker x:Name="TimePicker" IsVisible="False"/>
             <StackLayout Orientation="Horizontal" Grid.Row="2" Padding="3,3,3,3">
                 <Label x:Name="labelvehicle" Text="" HorizontalOptions="CenterAndExpand" VerticalTextAlignment="Center" VerticalOptions="CenterAndExpand" HorizontalTextAlignment="Center">
                     <Label.GestureRecognizers>

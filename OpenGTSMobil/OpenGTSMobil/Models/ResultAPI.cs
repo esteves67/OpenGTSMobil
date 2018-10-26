@@ -11,6 +11,8 @@ namespace OpenGTSMobil.Models
             public string Timestamp { get; set; }
             public string Timestamp_date { get; set; }
             public string Timestamp_time { get; set; }
+            public string Heading { get; set; }
+            public string Heading_desc { get; set; }
             public string StatusCode { get; set; }
             public string StatusCode_hex { get; set; }
             public string StatusCode_desc { get; set; }
