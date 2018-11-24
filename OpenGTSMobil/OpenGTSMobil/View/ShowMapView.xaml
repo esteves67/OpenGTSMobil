@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:maps="clr-namespace:Xamarin.Forms.GoogleMaps;assembly=Xamarin.Forms.GoogleMaps" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="OpenGTSMobil.View.ShowMapView">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="vehiculo" Priority="0" Order="Default" Clicked="Vehiculo_Clicked"/>
+        <ToolbarItem x:Name="timeDate" Priority="0" Order="Default" Clicked="TimeDate_Clicked"/>
+        <ToolbarItem x:Name="commandPicker" Priority="0" Order="Default" Clicked="CommandPicker_Clicked"/>
+        <ToolbarItem x:Name="eventDetailList" Priority="0" Order="Default" Clicked="EventDetailList_Clicked"/>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
@@ -10,20 +16,18 @@
             <maps:Map x:Name="map" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Grid.RowSpan="2"/>
             <Label x:Name="Attr" BackgroundColor="Transparent" Grid.Row="1" HorizontalTextAlignment="End" IsVisible="False"/>
             <DatePicker x:Name="TimePicker" IsVisible="False"/>
-            <StackLayout Orientation="Horizontal" Grid.Row="2" Padding="3,3,3,3">
-                <Label x:Name="labelvehicle" Text="" HorizontalOptions="CenterAndExpand" VerticalTextAlignment="Center" VerticalOptions="CenterAndExpand" HorizontalTextAlignment="Center">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Handle_Tapped"/>
-                    </Label.GestureRecognizers>
-                </Label>
-                <Image x:Name="exitImage" IsVisible="False" Source="" VerticalOptions="CenterAndExpand" HorizontalOptions="EndAndExpand">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
-                    </Image.GestureRecognizers>
-                </Image>
-                <Button x:Name="buttonExit" Text="Salir" VerticalOptions="CenterAndExpand" HorizontalOptions="EndAndExpand" IsVisible="False" Clicked="buttonExit_Clicked"/>
-                <Picker x:Name="PickerVehicle" Title="Vehiculos" IsVisible="false" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" SelectedIndexChanged="PickerVehicle_SelectedIndexChanged"/>
-            </StackLayout>
+            <Picker x:Name="SelectCommand" Title="Comando" IsVisible="False"/>
+            <Picker x:Name="PickerVehicle" Title="Vehiculos" IsVisible="false" SelectedIndexChanged="PickerVehicle_SelectedIndexChanged"/>
+            <Frame Grid.Row="2">
+                <StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Label x:Name="UltimoEvento" Text="Null" />
+                        <Label x:Name="lastReport" Text="Null"/>
+                    </StackLayout>
+                    <ActivityIndicator x:Name="loadActivity" IsVisible="False"/>
+                    <Label x:Name="Direccion"/>
+                </StackLayout>
+            </Frame>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

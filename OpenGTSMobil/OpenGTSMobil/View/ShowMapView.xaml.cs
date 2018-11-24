@@ -43,17 +43,6 @@ namespace OpenGTSMobil.View
                 Attr.IsVisible = true;
                 map.TileLayers.Add(tiles);
             }
-            if (string.IsNullOrEmpty(ShowMap.cerrarCuenta))
-            {
-                buttonExit.IsVisible = true;
-                exitImage.IsVisible = false;
-            }
-            else
-            {
-                buttonExit.IsVisible = false;
-                exitImage.Source = ShowMap.cerrarCuenta;
-                exitImage.IsVisible = true;
-            }
             map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(double.Parse(ShowMap.defaultPosition.Split(',')[0]), double.Parse(ShowMap.defaultPosition.Split(',')[1])), Distance.FromMeters(int.Parse(ShowMap.defaultPosition.Split(',')[2]))));
             map.UiSettings.MyLocationButtonEnabled = ShowMap.showMyLocation;
             Attr.Text = ShowMap.attrMap;
@@ -95,7 +84,7 @@ namespace OpenGTSMobil.View
             polyline.ZIndex = 1;
             polyline.StrokeWidth = ShowMap.anchoLineaMap;
             string rt = TimePicker.Date.ToString("yyyy/MM/dd") + "/23:59:59";
-            if (isFleet)
+            if (isFleet)    // muestra de eventos por grupo.
             {
                 Device.BeginInvokeOnMainThread(async() => {
                     RestClient client = new RestClient();
@@ -156,12 +145,12 @@ namespace OpenGTSMobil.View
             int index = PickerVehicle.SelectedIndex;
             ConfigModel.lastVehicleSelected = index;
             string itemIndexString = PickerVehicle.Items[index];
-            labelvehicle.Text = itemIndexString;
+            vehiculo.Text = itemIndexString;
             bool isFleet = false;
             if (itemIndexString.Equals(GrupoTextString))
             {
                 isFleet = true;
-                labelvehicle.Text = GrupoTextString;
+                vehiculo.Text = GrupoTextString;
             }
             else
             {
@@ -183,12 +172,12 @@ namespace OpenGTSMobil.View
             int index = (ConfigModel.lastVehicleSelected > Global.deviceList.Count) ? 0 : ConfigModel.lastVehicleSelected;
             PickerVehicle.SelectedIndex = index;
             string itemIndexString = PickerVehicle.Items[index];
-            labelvehicle.Text = itemIndexString;
+            vehiculo.Text = itemIndexString;
             bool isFleet = false;
             if (itemIndexString.Equals(GrupoTextString))
             {
                 isFleet = true;
-                labelvehicle.Text = GrupoTextString;
+                vehiculo.Text = GrupoTextString;
             }
             else
             {
@@ -202,7 +191,7 @@ namespace OpenGTSMobil.View
         {
 
             /*
-             *  [#350]   [Viejo de Jose Ortega] : Estacionado
+                [#350]   [Viejo de Jose Ortega] : Estacionado
                 Fecha: 25/06/2018 19:01:22 [GMT-05:00]
                 GPS: -2.14046 / -79.92809 [#Sats 18] MAPA GOOGLE
                 Velocidad: 0.0 km/h
@@ -291,6 +280,33 @@ namespace OpenGTSMobil.View
                 return "pin30_blue_h7.png";
             }
             return "pin30_blue_dot.png";
+        }
+
+        /* focus picekr vheicle */
+        private void Vehiculo_Clicked(object sender, EventArgs e)
+        {
+            PickerVehicle.Focus();
+        }
+
+        /* Focus time picker */
+        private void TimeDate_Clicked(object sender, EventArgs e)
+        {
+            TimePicker.Focus();
+        }
+
+        /* command picker focus*/
+        private void CommandPicker_Clicked(object sender, EventArgs e)
+        {
+            SelectCommand.Focus();
+        }
+
+        private void EventDetailList_Clicked(object sender, EventArgs e)
+        {
+            /* aqui va al salto de pagina de detalles de eventos 
+                
+               aun no esta construido.
+
+             */
         }
     }
 }

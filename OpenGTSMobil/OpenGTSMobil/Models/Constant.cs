@@ -59,9 +59,12 @@ namespace OpenGTSMobil.Models
     public class ShowMap
     {
         /* Estilo */
-        public static bool showNavBar = false;
+        public static bool showNavBar = true;
         public static string colorNavBar = "";                              //el color debe ser definido en HTML (#ffffff)
-        public static string colorTextNavBar = "";
+        public static string colorTextNavBar = "";                          //color del texto de la barra definido en HTML (#ffffff)
+        public static bool usingCommand = false;                            //define usaran los comandos en la app
+        public static bool eventDetail = false;                              //detalles de eventos
+        
 
         /*Icon*/
         public static string cerrarCuenta = "exit.png";                     //icono de salida
