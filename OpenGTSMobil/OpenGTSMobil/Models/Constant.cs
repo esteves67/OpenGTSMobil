@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Xamarin.Forms;
 using Xamarin.Forms.GoogleMaps;
@@ -23,6 +26,7 @@ namespace OpenGTSMobil.Models
         public static string urlServer = "https://autorenova.com/events/data.json";                                            //Url de consulta Events de OpenGTS en formato "JSON"
         public static List<DeviceList> deviceList { get; set; }
         public static string failNetwork = "Verifique su estado de red";
+        public static string vehicleSelect {get; set;}  //contiene el string del vehiculo seleccionado.
     }
 
     public class Login
@@ -81,5 +85,23 @@ namespace OpenGTSMobil.Models
         public static bool showMyLocation = false;                                                            //mostrar ubacion del usuario.
         public static string defaultPosition = "-2.0000000,-77.5000000,1000";                                 //posicion del mapa por defecto ejemplo:(latitud,longitud,metros) Ecuador
         public static int CantEvents = 100;                                                                   //Cantidad de eventos que mostrara en pantallla.
+    }
+
+    // lista de eventos detallados
+    public class EventDetails : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        // funcion que ejecuata el cambio de propiedades
+        protected void OnPropertyChange([CallerMemberName]  string propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        private static ObservableCollection<EventData> _EDM = new ObservableCollection<EventData>();
+        public static ObservableCollection<EventData> EDM { get { return _EDM; } set { _EDM = value; } }
     }
 }

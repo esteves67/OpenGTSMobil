@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="OpenGTSMobil.View.ShowEventDetailView"
+             BackgroundColor="Black">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Name="Map" Order="Default" Icon="Mapa.png" Text="Mapa" Clicked="Map_Clicked"/>
+        <!--<ToolbarItem Name="Map" Order="Default" Icon="Street.png" Text="Street View" Clicked="StreetView_Clicked"/>-->
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Padding="0,0,0,0">
+                <StackLayout Margin="10">
+                    <Grid RowSpacing="0" ColumnSpacing="40">
+                        <Grid.ColumnDefinitions>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Label TextColor="White" Text="Evento:" Grid.Column="0" Grid.Row="0" FontSize="12" FontAttributes="Bold"/>
+                        <Label TextColor="White" Text="Estado:" Grid.Column="1" Grid.Row="0" FontSize="12" FontAttributes="Bold"/>
+                        <Label Text="{Binding Index}" TextColor="White" Grid.Row="1" Grid.Column="0" FontSize="12"/>
+                        <Label Text="{Binding StatusCode_desc}" TextColor="White" Grid.Column="1" Grid.Row="1" FontSize="12"/>
+                        <Label TextColor="White" Text="Coordenadas:" Grid.Column="0" Grid.Row="2" FontSize="12" FontAttributes="Bold"/>
+                        <Label TextColor="White" Text="Fecha/Hora:" Grid.Column="1" Grid.Row="2" FontSize="12" FontAttributes="Bold"/>
+                        <Label Text="{Binding GPSPoint}" TextColor="White" Grid.Row="3" Grid.Column="0" FontSize="12"/>
+                        <Label Text="{Binding Timestamp_date}" TextColor="White" Grid.Row="3" Grid.Column="1" FontSize="12"/>
+                        <Label TextColor="White" Text="Rumbo:" Grid.Column="0" Grid.Row="4" FontSize="12" FontAttributes="Bold"/>
+                        <Label TextColor="White" Text="km/h:" Grid.Column="1" Grid.Row="4" FontSize="12" FontAttributes="Bold"/>
+                        <Label Text="{Binding Heading}" TextColor="White" Grid.Column="0" Grid.Row="5" FontSize="12"/>
+                        <Label Text="{Binding Speed}" TextColor="White" Grid.Column="1" Grid.Row="5" FontSize="12"/>
+                        <Label TextColor="White" Text="Bateria:" Grid.Column="0" Grid.Row="6" FontSize="12" FontAttributes="Bold"/>
+                        <Label TextColor="White" Text="Odometro(km):" Grid.Column="1" Grid.Row="6" FontSize="12" FontAttributes="Bold"/>
+                        <Label Text="{Binding VehicleBatteryVolts}" TextColor="White" Grid.Column="0" Grid.Row="7" FontSize="12"/>
+                        <Label Text="{Binding Odometer}" TextColor="White" Grid.Column="1" Grid.Row="7" FontSize="12"/>
+                    </Grid>
+                </StackLayout>
+                <Label TextColor="White" Text="Direccion:" FontSize="12" FontAttributes="Bold"/>
+                <Label Text="{Binding Address}" TextColor="White" FontSize="12"/>
+                <WebView x:Name="webView" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Navigating="WebView_Navigating" InputTransparent="true" />
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

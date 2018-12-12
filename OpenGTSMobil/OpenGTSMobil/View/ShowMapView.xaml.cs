@@ -76,7 +76,7 @@ namespace OpenGTSMobil.View
         }
 
         /* Muestra los puntos en el mapa con su ruta*/
-        void RenderMap(bool isFleet = false, string deviceID = "")
+        async void RenderMap(bool isFleet = false, string deviceID = "")
         {
             cleanMap();
             var polyline = new Polyline();
@@ -84,52 +84,111 @@ namespace OpenGTSMobil.View
             polyline.ZIndex = 1;
             polyline.StrokeWidth = ShowMap.anchoLineaMap;
             string rt = TimePicker.Date.ToString("yyyy/MM/dd") + "/23:59:59";
+            var EDL = EventDetails.EDM;
+            if (EDL.Count > 0)
+            {
+                EDL.Clear();
+            }
             if (isFleet)    // muestra de eventos por grupo.
             {
-                Device.BeginInvokeOnMainThread(async() => {
-                    RestClient client = new RestClient();
-                    var response = await client.GetEventGroup<AccountData>();
-                    if (response != null)
+                RestClient client = new RestClient();
+                var response = await client.GetEventGroup<AccountData>();
+                if (response != null)
+                {
+                    List<DeviceList> ld = response.DeviceList;
+                    for (int di = 0; di < ld.Count; di++)
                     {
-                        List<DeviceList> ld = response.DeviceList;
-                        for (int di = 0; di < ld.Count; di++)
+                        string Nombre = "";
+                        Nombre = ld[di].Device_desc;
+                        List<EventData> ed = ld[di].EventData;
+                        for (int edi = 0; edi < ed.Count; edi++)
                         {
-                            List<EventData> ed = ld[di].EventData;
-                            for (int edi = 0; edi < ed.Count; edi++)
+                            string heading;
+                            if (ed[edi].Heading == null || ed[edi].Heading.Equals("") || string.IsNullOrEmpty(ed[edi].Heading))
                             {
-                                posi = new Position(double.Parse(ed[edi].GPSPoint_lat), double.Parse(ed[edi].GPSPoint_lon));
-                                map.Pins.Add(new Pin { Label = PinLabel(ed[edi]), Position = posi, Address = ed[edi].Address, Icon = BitmapDescriptorFactory.FromBundle("pin30_blue.png") });
+                                heading = "0";
                             }
+                            else
+                            {
+                                heading = ed[edi].Heading;
+                            }
+                            string HeadingDescrpt = (heading.Equals("0")) ? "N" : ed[edi].Heading_desc;
+                            EDL.Add(new EventData
+                            {
+
+                                Index = Nombre,
+                                StatusCode_desc = ed[edi].StatusCode_desc,
+                                Timestamp_time = ed[edi].Timestamp_date + " " + ed[edi].Timestamp_time,
+                                Speed = ed[edi].Speed,
+                                Address = ed[edi].Address,
+                                Altitude = ed[edi].Altitude,
+                                Device = ed[edi].Device,
+                                GPSPoint = ed[edi].GPSPoint,
+                                GPSPoint_lat = ed[edi].GPSPoint_lat,
+                                GPSPoint_lon = ed[edi].GPSPoint_lon,
+                                Heading = heading + "° " + HeadingDescrpt,
+                                Odometer = ed[edi].Odometer,
+                                Timestamp_date = ed[edi].Timestamp_date
+
+                            });
+                            posi = new Position(double.Parse(ed[edi].GPSPoint_lat), double.Parse(ed[edi].GPSPoint_lon));
+                            map.Pins.Add(new Pin { Label = PinLabel(ed[edi]), Position = posi, Address = ed[edi].Address, Icon = BitmapDescriptorFactory.FromBundle("pin30_blue.png") });
                         }
-                        map.MoveToRegion(MapSpan.FromCenterAndRadius(posi, Distance.FromMeters(10000)));
                     }
-                });
+                    map.MoveToRegion(MapSpan.FromCenterAndRadius(posi, Distance.FromMeters(10000)));
+                }
             }
             else
             {
-                Device.BeginInvokeOnMainThread(async () => {
-                    RestClient client = new RestClient();
-                    var response = await client.GetEventsVehicle<AccountData>(deviceID,rt);
-                    if (response != null)
+                RestClient client = new RestClient();
+                var response = await client.GetEventsVehicle<AccountData>(deviceID, rt);
+                if (response != null)
+                {
+                    List<DeviceList> ld = response.DeviceList;
+                    for (int di = 0; di < ld.Count; di++)
                     {
-                        List<DeviceList> ld = response.DeviceList;
-                        for (int di = 0; di < ld.Count; di++)
+                        List<EventData> ed = ld[di].EventData;
+                        for (int edi = 0; edi < ed.Count; edi++)
                         {
-                            List<EventData> ed = ld[di].EventData;
-                            for (int edi = 0; edi < ed.Count; edi++)
+                            string heading;
+                            if (ed[edi].Heading == null || ed[edi].Heading.Equals("") || string.IsNullOrEmpty(ed[edi].Heading))
                             {
-                                posi = new Position(double.Parse(ed[edi].GPSPoint_lat), double.Parse(ed[edi].GPSPoint_lon));
-                                polyline.Positions.Add(posi);
-                                map.Pins.Add(new Pin { Label = PinLabel(ed[edi]), Position = posi, Address = ed[edi].Address, Tag=ed[edi].Index, Icon = BitmapDescriptorFactory.FromBundle(CalculatePushPin(ed[edi].Heading,ed[edi].Speed)) });
+                                heading = "0";
                             }
+                            else
+                            {
+                                heading = ed[edi].Heading;
+                            }
+                            string HeadingDescrpt = (heading.Equals("0")) ? "N" : ed[edi].Heading_desc;
+                            EDL.Add(new EventData
+                            {
+
+                                Index = ed[edi].Index,
+                                StatusCode_desc = ed[edi].StatusCode_desc,
+                                Timestamp_time = ed[edi].Timestamp_date + " " + ed[edi].Timestamp_time,
+                                Speed = ed[edi].Speed,
+                                Address = ed[edi].Address,
+                                Altitude = ed[edi].Altitude,
+                                Device = ed[edi].Device,
+                                GPSPoint = ed[edi].GPSPoint,
+                                GPSPoint_lat = ed[edi].GPSPoint_lat,
+                                GPSPoint_lon = ed[edi].GPSPoint_lon,
+                                Heading = heading + "° " + HeadingDescrpt,
+                                Odometer = ed[edi].Odometer,
+                                Timestamp_date = ed[edi].Timestamp_date
+
+                            });
+                            posi = new Position(double.Parse(ed[edi].GPSPoint_lat), double.Parse(ed[edi].GPSPoint_lon));
+                            polyline.Positions.Add(posi);
+                            map.Pins.Add(new Pin { Label = PinLabel(ed[edi]), Position = posi, Address = ed[edi].Address, Tag = ed[edi].Index, Icon = BitmapDescriptorFactory.FromBundle(CalculatePushPin(ed[edi].Heading, ed[edi].Speed)) });
                         }
-                        if (response.DeviceList[0].EventData.Count > 1)
-                        {
-                            map.Polylines.Add(polyline);
-                        }
-                        map.MoveToRegion(MapSpan.FromCenterAndRadius(posi, Distance.FromMeters(1000)));
                     }
-                });
+                    if (response.DeviceList[0].EventData.Count > 1)
+                    {
+                        map.Polylines.Add(polyline);
+                    }
+                    map.MoveToRegion(MapSpan.FromCenterAndRadius(posi, Distance.FromMeters(1000)));
+                }
             }
         }
 
@@ -156,8 +215,8 @@ namespace OpenGTSMobil.View
             {
                 itemIndexString = Global.deviceList[index - 1].Device;
             }
+            Global.vehicleSelect = itemIndexString;
             RenderMap(isFleet, itemIndexString);
-
         }
 
         /* carga los datos en el picker */
@@ -183,6 +242,7 @@ namespace OpenGTSMobil.View
             {
                 itemIndexString = Global.deviceList[index].Device;
             }
+            Global.vehicleSelect = itemIndexString;
             RenderMap(isFleet, itemIndexString);    
         }
 
@@ -302,11 +362,7 @@ namespace OpenGTSMobil.View
 
         private void EventDetailList_Clicked(object sender, EventArgs e)
         {
-            /* aqui va al salto de pagina de detalles de eventos 
-                
-               aun no esta construido.
-
-             */
+            Navigation.PushAsync(new EventDetailsView());
         }
     }
 }

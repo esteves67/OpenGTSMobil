@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="OpenGTSMobil.View.EventDetailsView"
+             BackgroundColor="Black">
+    <ContentPage.Content>
+        <StackLayout Padding="0,0,0,0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <StackLayout>
+                <Grid VerticalOptions="FillAndExpand">
+                    <Label Text="EVENTO:" Grid.Column="0" TextColor="White" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" VerticalOptions="FillAndExpand"/>
+                    <Label Text="ESTADO:" Grid.Column="1" TextColor="White" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" VerticalOptions="FillAndExpand"/>
+                    <Label Text="HORA:" Grid.Column="2" TextColor="White" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" VerticalOptions="FillAndExpand"/>
+                    <Label Text="KM/H:" Grid.Column="3" TextColor="White" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" VerticalOptions="FillAndExpand"/>
+                </Grid>
+            </StackLayout>
+            <ListView CachingStrategy="RecycleElement" x:Name="ListViewEvents" ItemsSource="{Binding ListEventDetail}" BackgroundColor="Black" SeparatorColor="White" ItemTapped="ListViewEvents_ItemTapped" ItemSelected="ListViewEvents_ItemSelected" >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid>
+                                <Label x:Name="indexLabel" Grid.Column="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontAttributes="Bold" FontSize="{Binding SizeIndex}" Text="{Binding Index}" BackgroundColor="#494949" TextColor="White" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                                <Label x:Name="StateLabel" Grid.Column="1" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" TextColor="White" Text="{Binding StatusCode_desc}" FontSize="{Binding SizeState}"/>
+                                <Label x:Name="TimeLabel" Grid.Column="2" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" TextColor="White" Text="{Binding Timestamp_time}" FontSize="{Binding SizeTime}"/>
+                                <Label x:Name="SpeedLabel" Grid.Column="3" FontAttributes="Bold" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontSize="{Binding SizeSpeed}" Text="{Binding Speed}" BackgroundColor="#494949" TextColor="White" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
