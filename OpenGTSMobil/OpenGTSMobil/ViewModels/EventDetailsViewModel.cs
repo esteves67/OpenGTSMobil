@@ -42,7 +42,7 @@ namespace OpenGTSMobil.ViewModels
             {
                 if (Global.vehicleSelect != null)
                 {
-                    if (Global.vehicleSelect.Equals("TODOS"))
+                    if (Global.vehicleSelect.Equals("Grupo"))
                     {
                         SizeIndex = "9";
                         SizeState = "9";
@@ -62,7 +62,7 @@ namespace OpenGTSMobil.ViewModels
             {
                 if (Global.vehicleSelect != null)
                 {
-                    if (Global.vehicleSelect.Equals("TODOS"))
+                    if (Global.vehicleSelect.Equals("Grupo"))
                     {
                         SizeIndex = "9";
                         SizeState = "9";

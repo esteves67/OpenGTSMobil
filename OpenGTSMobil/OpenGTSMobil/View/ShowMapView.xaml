@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:maps="clr-namespace:Xamarin.Forms.GoogleMaps;assembly=Xamarin.Forms.GoogleMaps" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="OpenGTSMobil.View.ShowMapView">
     <ContentPage.ToolbarItems>
-        <ToolbarItem x:Name="vehiculo" Priority="0" Order="Default" Clicked="Vehiculo_Clicked"/>
         <ToolbarItem x:Name="timeDate" Priority="0" Order="Default" Clicked="TimeDate_Clicked"/>
         <ToolbarItem x:Name="commandPicker" Priority="0" Order="Default" Clicked="CommandPicker_Clicked"/>
         <ToolbarItem x:Name="eventDetailList" Priority="0" Order="Default" Clicked="EventDetailList_Clicked"/>
+        <ToolbarItem x:Name="vehiculo" Priority="0" Order="Default" Clicked="Vehiculo_Clicked"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <Grid>

@@ -17,6 +17,8 @@ namespace OpenGTSMobil.View
         public string OSMSelected = "OSM";
         public string TitleErrorAlert = "Error";
         public string GrupoTextString = "Grupo";
+        public List<EventData> ed;
+        public List<DeviceList> ld;
 
         public ShowMapView()
         {
@@ -84,57 +86,23 @@ namespace OpenGTSMobil.View
             polyline.ZIndex = 1;
             polyline.StrokeWidth = ShowMap.anchoLineaMap;
             string rt = TimePicker.Date.ToString("yyyy/MM/dd") + "/23:59:59";
-            var EDL = EventDetails.EDM;
-            if (EDL.Count > 0)
-            {
-                EDL.Clear();
-            }
             if (isFleet)    // muestra de eventos por grupo.
             {
                 RestClient client = new RestClient();
                 var response = await client.GetEventGroup<AccountData>();
                 if (response != null)
                 {
-                    List<DeviceList> ld = response.DeviceList;
+                    ld = response.DeviceList;
                     for (int di = 0; di < ld.Count; di++)
                     {
-                        string Nombre = "";
-                        Nombre = ld[di].Device_desc;
-                        List<EventData> ed = ld[di].EventData;
+                        ed = ld[di].EventData;
                         for (int edi = 0; edi < ed.Count; edi++)
                         {
-                            string heading;
-                            if (ed[edi].Heading == null || ed[edi].Heading.Equals("") || string.IsNullOrEmpty(ed[edi].Heading))
-                            {
-                                heading = "0";
-                            }
-                            else
-                            {
-                                heading = ed[edi].Heading;
-                            }
-                            string HeadingDescrpt = (heading.Equals("0")) ? "N" : ed[edi].Heading_desc;
-                            EDL.Add(new EventData
-                            {
-
-                                Index = Nombre,
-                                StatusCode_desc = ed[edi].StatusCode_desc,
-                                Timestamp_time = ed[edi].Timestamp_date + " " + ed[edi].Timestamp_time,
-                                Speed = ed[edi].Speed,
-                                Address = ed[edi].Address,
-                                Altitude = ed[edi].Altitude,
-                                Device = ed[edi].Device,
-                                GPSPoint = ed[edi].GPSPoint,
-                                GPSPoint_lat = ed[edi].GPSPoint_lat,
-                                GPSPoint_lon = ed[edi].GPSPoint_lon,
-                                Heading = heading + "° " + HeadingDescrpt,
-                                Odometer = ed[edi].Odometer,
-                                Timestamp_date = ed[edi].Timestamp_date
-
-                            });
                             posi = new Position(double.Parse(ed[edi].GPSPoint_lat), double.Parse(ed[edi].GPSPoint_lon));
                             map.Pins.Add(new Pin { Label = PinLabel(ed[edi]), Position = posi, Address = ed[edi].Address, Icon = BitmapDescriptorFactory.FromBundle("pin30_blue.png") });
                         }
                     }
+                    addEventList();     //carga la lista de eventos
                     map.MoveToRegion(MapSpan.FromCenterAndRadius(posi, Distance.FromMeters(10000)));
                 }
             }
@@ -144,40 +112,12 @@ namespace OpenGTSMobil.View
                 var response = await client.GetEventsVehicle<AccountData>(deviceID, rt);
                 if (response != null)
                 {
-                    List<DeviceList> ld = response.DeviceList;
+                    ld = response.DeviceList;
                     for (int di = 0; di < ld.Count; di++)
                     {
-                        List<EventData> ed = ld[di].EventData;
+                        ed = ld[di].EventData;
                         for (int edi = 0; edi < ed.Count; edi++)
                         {
-                            string heading;
-                            if (ed[edi].Heading == null || ed[edi].Heading.Equals("") || string.IsNullOrEmpty(ed[edi].Heading))
-                            {
-                                heading = "0";
-                            }
-                            else
-                            {
-                                heading = ed[edi].Heading;
-                            }
-                            string HeadingDescrpt = (heading.Equals("0")) ? "N" : ed[edi].Heading_desc;
-                            EDL.Add(new EventData
-                            {
-
-                                Index = ed[edi].Index,
-                                StatusCode_desc = ed[edi].StatusCode_desc,
-                                Timestamp_time = ed[edi].Timestamp_date + " " + ed[edi].Timestamp_time,
-                                Speed = ed[edi].Speed,
-                                Address = ed[edi].Address,
-                                Altitude = ed[edi].Altitude,
-                                Device = ed[edi].Device,
-                                GPSPoint = ed[edi].GPSPoint,
-                                GPSPoint_lat = ed[edi].GPSPoint_lat,
-                                GPSPoint_lon = ed[edi].GPSPoint_lon,
-                                Heading = heading + "° " + HeadingDescrpt,
-                                Odometer = ed[edi].Odometer,
-                                Timestamp_date = ed[edi].Timestamp_date
-
-                            });
                             posi = new Position(double.Parse(ed[edi].GPSPoint_lat), double.Parse(ed[edi].GPSPoint_lon));
                             polyline.Positions.Add(posi);
                             map.Pins.Add(new Pin { Label = PinLabel(ed[edi]), Position = posi, Address = ed[edi].Address, Tag = ed[edi].Index, Icon = BitmapDescriptorFactory.FromBundle(CalculatePushPin(ed[edi].Heading, ed[edi].Speed)) });
@@ -187,6 +127,7 @@ namespace OpenGTSMobil.View
                     {
                         map.Polylines.Add(polyline);
                     }
+                    addEventList();
                     map.MoveToRegion(MapSpan.FromCenterAndRadius(posi, Distance.FromMeters(1000)));
                 }
             }
@@ -360,9 +301,98 @@ namespace OpenGTSMobil.View
             SelectCommand.Focus();
         }
 
+        /* Navega hacia la lista de eventos */
         private void EventDetailList_Clicked(object sender, EventArgs e)
         {
             Navigation.PushAsync(new EventDetailsView());
+        }
+
+        /* crea la lista de eventos */
+        private void addEventList()
+        {
+            var EDL = EventDetails.EDM;
+            if (EDL.Count > 0)
+            {
+                EDL.Clear();
+            }
+            if (vehiculo.Text.Equals(GrupoTextString))
+            {
+                for (int di = 0; di < ld.Count; di++)
+                {
+                    string Nombre = "";
+                    Nombre = ld[di].Device_desc;
+                    ed = ld[di].EventData;
+                    for (int edi = 0; edi < ed.Count; edi++)
+                    {
+                        string heading;
+                        if (ed[edi].Heading == null || ed[edi].Heading.Equals("") || string.IsNullOrEmpty(ed[edi].Heading))
+                        {
+                            heading = "0";
+                        }
+                        else
+                        {
+                            heading = ed[edi].Heading;
+                        }
+                        string HeadingDescrpt = (heading.Equals("0")) ? "N" : ed[edi].Heading_desc;
+                        EDL.Add(new EventData
+                        {
+
+                            Index = Nombre,
+                            StatusCode_desc = ed[edi].StatusCode_desc,
+                            Timestamp_time = ed[edi].Timestamp_date + " " + ed[edi].Timestamp_time,
+                            Speed = ed[edi].Speed,
+                            Address = ed[edi].Address,
+                            Altitude = ed[edi].Altitude,
+                            Device = ed[edi].Device,
+                            GPSPoint = ed[edi].GPSPoint,
+                            GPSPoint_lat = ed[edi].GPSPoint_lat,
+                            GPSPoint_lon = ed[edi].GPSPoint_lon,
+                            Heading = heading + "° " + HeadingDescrpt,
+                            Odometer = ed[edi].Odometer,
+                            Timestamp_date = ed[edi].Timestamp_date
+
+                        });
+                    }
+                }
+            }
+            else
+            {
+                for (int di = 0; di < ld.Count; di++)
+                {
+                    ed = ld[di].EventData;
+                    for (int edi = 0; edi < ed.Count; edi++)
+                    {
+                        string heading;
+                        if (ed[edi].Heading == null || ed[edi].Heading.Equals("") || string.IsNullOrEmpty(ed[edi].Heading))
+                        {
+                            heading = "0";
+                        }
+                        else
+                        {
+                            heading = ed[edi].Heading;
+                        }
+                        string HeadingDescrpt = (heading.Equals("0")) ? "N" : ed[edi].Heading_desc;
+                        EDL.Add(new EventData
+                        {
+
+                            Index = ed[edi].Index,
+                            StatusCode_desc = ed[edi].StatusCode_desc,
+                            Timestamp_time = ed[edi].Timestamp_date + " " + ed[edi].Timestamp_time,
+                            Speed = ed[edi].Speed,
+                            Address = ed[edi].Address,
+                            Altitude = ed[edi].Altitude,
+                            Device = ed[edi].Device,
+                            GPSPoint = ed[edi].GPSPoint,
+                            GPSPoint_lat = ed[edi].GPSPoint_lat,
+                            GPSPoint_lon = ed[edi].GPSPoint_lon,
+                            Heading = heading + "° " + HeadingDescrpt,
+                            Odometer = ed[edi].Odometer,
+                            Timestamp_date = ed[edi].Timestamp_date
+
+                        });
+                    }
+                }
+            }
         }
     }
 }

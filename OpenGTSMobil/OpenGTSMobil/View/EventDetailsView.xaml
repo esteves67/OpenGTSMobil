@@ -13,7 +13,7 @@
                     <Label Text="KM/H:" Grid.Column="3" TextColor="White" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" VerticalOptions="FillAndExpand"/>
                 </Grid>
             </StackLayout>
-            <ListView CachingStrategy="RecycleElement" x:Name="ListViewEvents" ItemsSource="{Binding ListEventDetail}" BackgroundColor="Black" SeparatorColor="White" ItemTapped="ListViewEvents_ItemTapped" ItemSelected="ListViewEvents_ItemSelected" >
+            <ListView  x:Name="ListViewEvents" ItemsSource="{Binding ListEventDetail}" BackgroundColor="Black" SeparatorColor="White" ItemTapped="ListViewEvents_ItemTapped" ItemSelected="ListViewEvents_ItemSelected" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
