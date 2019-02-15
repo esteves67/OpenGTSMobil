@@ -244,39 +244,39 @@ namespace OpenGTSMobil.View
         {
             double _speed = (!string.IsNullOrEmpty(speed))? double.Parse(speed) : 0.0;
             double _heading = (!string.IsNullOrEmpty(heading))? double.Parse(heading) : 0.0;
-            if (_speed < 2)
+            if (_speed < 2.0)
             {
                 return "pin30_blue_dot.png";
             }
-            if ((_heading >= 337 && _heading <= 360) || (_heading >= 1 && _heading < 23))
+            if ((_heading >= 337.0 && _heading <= 360.0) || (_heading >= 1.0 && _heading < 23.0))
             {
                 return "pin30_blue_h0.png";
             }
-            if (_heading >= 23 && _heading < 68)
+            if (_heading >= 23.0 && _heading < 68.0)
             {
                 return "pin30_blue_h1.png";
             }
-            if (_heading >= 68 && _heading < 113)
+            if (_heading >= 68.0 && _heading < 113.0)
             {
                 return "pin30_blue_h2.png";
             }
-            if (_heading >= 113 && _heading < 158)
+            if (_heading >= 113.0 && _heading < 158.0)
             {
                 return "pin30_blue_h3.png";
             }
-            if (_heading >= 158 && _heading < 203)
+            if (_heading >= 158.0 && _heading < 203.0)
             {
                 return "pin30_blue_h4.png";
             }
-            if(_heading >= 203 && _heading < 248)
+            if(_heading >= 203.0 && _heading < 248.0)
             {
                 return "pin30_blue_h5.png";
             }
-            if (_heading >= 248 && _heading < 293)
+            if (_heading >= 248.0 && _heading < 293.0)
             {
                 return "pin30_blue_h6.png";
             }
-            if (_heading >= 293 && _heading < 337)
+            if (_heading >= 293.0 && _heading < 337.0)
             {
                 return "pin30_blue_h7.png";
             }
